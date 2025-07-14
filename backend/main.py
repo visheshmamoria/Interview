@@ -99,7 +99,7 @@ async def transcribe_audio(file: UploadFile = File(...), request: Request = None
 from fastapi import Body
 
 @app.post("/api/audio/speak")
-async def speak_text(req: SpeakRequest):
+async def speak_text(req: SpeakRequest, request: Request):
     print("/audio/speak invoked")
     print("Body:", req)
     print(f"[TTS] Text: {req.text}")
@@ -113,5 +113,6 @@ async def speak_text(req: SpeakRequest):
     else:
         await tts_elevenlabs(req.text, outpath)
     # Return URL for frontend (hardcoded base for now)
-    audio_url = f"http://localhost:8000/audio/{filename}"
+    base_url = request.base_url._url.rstrip("/")
+    audio_url = f"{base_url}/audio/{filename}"
     return {"audio_url": audio_url}
