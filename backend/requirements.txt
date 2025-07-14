@@ -1,6 +1,8 @@
 fastapi
-uvicorn
+uvicorn[standard]
 openai
 deepgram-sdk
 httpx
 python-dotenv
+aiofiles
+requests
