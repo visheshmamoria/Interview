@@ -4,6 +4,9 @@ import VoiceInterviewWelcome from "./pages/VoiceInterviewWelcome.jsx";
 import InterviewInProgress from "./pages/InterviewInProgress.jsx";
 import InterviewComplete from "./pages/InterviewComplete.jsx";
 
+// ✅ use Vite environment variable
+const apiBase = import.meta.env.VITE_API_URL;
+
 function App() {
   const [conversationMode, setConversationMode] = useState(false);
   const [conversationActive, setConversationActive] = useState(false);
@@ -48,7 +51,7 @@ function App() {
       try {
         const fakeTranscript = 'नमस्ते, मेरा नाम अमित है।';
         setTranscript(fakeTranscript);
-        const res2 = await fetch('http://localhost:8000/interview/ask', {
+        const res2 = await fetch(`${apiBase}/interview/ask`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ message: fakeTranscript, language }),
@@ -57,7 +60,7 @@ function App() {
         setQuestion(fakeTranscript);
         setAnswer(data2.response);
 
-        const res3 = await fetch('http://localhost:8000/api/audio/speak', {
+        const res3 = await fetch(`${apiBase}/api/audio/speak`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ text: data2.response, language }),
@@ -93,7 +96,7 @@ function App() {
     setAiAudioUrl(null);
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:8000/interview/ask', {
+      const res = await fetch(`${apiBase}/interview/ask`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: '', language })
@@ -101,7 +104,7 @@ function App() {
       const data = await res.json();
       setAnswer(data.response);
 
-      const res2 = await fetch('http://localhost:8000/api/audio/speak', {
+      const res2 = await fetch(`${apiBase}/api/audio/speak`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: data.response, language })
@@ -149,14 +152,14 @@ function App() {
         const formData = new FormData();
         formData.append('file', audioBlob, 'audio.wav');
         try {
-          const transRes = await fetch('http://localhost:8000/api/audio/transcribe', {
+          const transRes = await fetch(`${apiBase}/api/audio/transcribe`, {
             method: 'POST',
             body: formData
           });
           const transData = await transRes.json();
           setTranscript(transData.transcript);
 
-          const res2 = await fetch('http://localhost:8000/interview/ask', {
+          const res2 = await fetch(`${apiBase}/interview/ask`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ message: transData.transcript, language })
@@ -165,7 +168,7 @@ function App() {
           setQuestion(transData.transcript);
           setAnswer(data2.response);
 
-          const res3 = await fetch('http://localhost:8000/api/audio/speak', {
+          const res3 = await fetch(`${apiBase}/api/audio/speak`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ text: data2.response, language })
@@ -216,7 +219,7 @@ function App() {
 
   const sendToInterview = async (msg) => {
     setLoading(true);
-    const res = await fetch('http://localhost:8000/interview/ask', {
+    const res = await fetch(`${apiBase}/interview/ask`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message: msg || transcript, language }),
