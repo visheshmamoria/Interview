@@ -1,6 +1,6 @@
 import React from "react";
 import { Player } from '@lottiefiles/react-lottie-player';
-import voiceSphere from '/Users/visheshmamoria/Desktop/InterviewBot/frontend/src/animations/voice-sphere.json'; // Adjust path if needed
+import voiceSphere from "../animations/voice-sphere.json";
 import { useMicVolume } from '../hooks/useMicVolume';
 
 // You may want to pass 'recording' as a prop from App, for now set to true for demo
